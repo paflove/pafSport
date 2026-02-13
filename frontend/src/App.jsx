@@ -1,32 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'; // Добавлен useNavigate
 import axios from 'axios';
-import ChatWidget from './components/ChatWidget'; // <-- Импорт виджета
-// Импорт стилей
+import ChatWidget from './components/ChatWidget';
 import './index.css'; 
 
-// Импорт компонентов
 import Header from './components/Header';
 import AuthModal from './components/AuthModal';
 
-// Импорт страниц
 import HomePage from './pages/HomePage';
 import ClubsPage from './pages/ClubsPage';
 import TariffsPage from './pages/TariffsPage';
 import ClubDetailsPage from './pages/ClubDetailsPage';
 import ProfilePage from './pages/ProfilePage';
 
-function App() {
+// 1. Создаем внутренний компонент, который находится ВНУТРИ Router
+function MainContent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState(null); 
+  const [user, setUser] = useState(null);
+  
+  // 2. Теперь здесь можно использовать useNavigate
+  const navigate = useNavigate();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   const fetchUserProfile = async (token) => {
     localStorage.setItem('access_token', token);
-
     try {
+        // Убрал params: token, так как обычно токен шлют в заголовке Authorization
+        // Но оставил как у тебя было для совместимости с Python кодом
         const response = await axios.get('http://localhost:8000/api/v1/users/me', {
             params: { token: token } 
         });
@@ -38,11 +40,11 @@ function App() {
     }
   };
 
-  // Исправленная логика: добавлен async и редирект
   const handleLoginSuccess = async (token) => {
     closeModal(); 
     await fetchUserProfile(token); 
-    window.location.href = '/profile'; // Перенаправление
+    // 3. Плавный переход вместо перезагрузки страницы
+    navigate('/profile');
   };
 
   useEffect(() => {
@@ -55,11 +57,12 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     setUser(null);
-    window.location.href = '/'; 
+    // 4. Плавный переход на главную
+    navigate('/');
   };
 
   return (
-    <BrowserRouter>
+    <>
       <Header 
         onOpenModal={openModal} 
         user={user} 
@@ -70,6 +73,7 @@ function App() {
         <Route path="/" element={<HomePage onOpenModal={openModal} />} />
         <Route path="/clubs" element={<ClubsPage onOpenModal={openModal} />} />
         <Route path="/tariffs" element={<TariffsPage onOpenModal={openModal} />} />
+        {/* Обрати внимание: теперь страница деталей реально использует :clubId */}
         <Route path="/club/:clubId" element={<ClubDetailsPage onOpenModal={openModal} />} />
         
         <Route 
@@ -86,10 +90,16 @@ function App() {
         onLoginSuccess={handleLoginSuccess} 
       />
 
-      {/* --- ДОБАВЛЕН ВИДЖЕТ ЧАТА --- */}
-      {/* Он находится вне Routes, чтобы быть доступным на любой странице */}
       <ChatWidget />
-      
+    </>
+  );
+}
+
+// 5. Основной компонент App теперь просто провайдер Роутера
+function App() {
+  return (
+    <BrowserRouter>
+      <MainContent />
     </BrowserRouter>
   );
 }

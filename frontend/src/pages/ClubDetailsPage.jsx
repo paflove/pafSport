@@ -1,67 +1,68 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import axios from 'axios'; // 1. Импортируем axios
 import Header from '../components/Header';
 
-// ... (Ваша FAKE_DB и DAYS остаются здесь без изменений) ...
-const FAKE_DB = {
-  riviera: {
-    title: 'ТЦ "Ривьера"',
-    address: 'Автозаводская ул., 18, Москва, 115280',
-    image: '/assets/images/rivera.png',
-    features: [
-      'Ежедневно с 6 до 24', 'Парковка', 'Групповые программы', 'SPA-зона', 
-      'Удобные раздевалки и душевые', 'Премиальное оборудование'
-    ],
-    load: ['70%', '90%', '60%', '75%', '80%', '65%', '50%']
-  },
-  gorod: {
-    title: 'ТЦ "Город"',
-    address: 'ш. Энтузиастов, 12 к.2, Москва, 111024',
-    image: '/assets/images/city.jpg',
-    features: [
-      'Ежедневно с 6 до 24', 'Парковка', 'Групповые программы', 'SPA-зона', 
-      'Удобные раздевалки и душевые', 'Премиальное оборудование'
-    ],
-    load: ['95%', '70%', '75%', '65%', '85%', '55%', '45%']
-  },
-  afimoll: {
-    title: 'ТЦ "Афимолл"',
-    address: 'Пресненская наб., 2, Москва, 123112',
-    image: '/assets/images/afimoll.jpg',
-    features: [
-      'Ежедневно с 6 до 24', 'Парковка', 'Групповые программы', 'SPA-зона', 
-      'Удобные раздевалки и душевые', 'Премиальное оборудование'
-    ],
-    load: ['80%', '95%', '70%', '85%', '90%', '60%', '40%']
-  }
-};
+// 2. Дни недели статичны, их оставляем
 const DAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
+// 3. Карта сопоставления URL-slug -> ID клуба в базе данных
+// (В URL у тебя /club/riviera, а бэкенд ждет ID=1)
+const CLUB_ID_MAP = {
+  'riviera': 1,
+  'gorod': 2,
+  'afimoll': 3
+};
 
 function ClubDetailsPage({ onOpenModal }) {
-  const { clubId } = useParams(); 
-  const clubData = FAKE_DB[clubId] || FAKE_DB.riviera;
+  const { clubId } = useParams(); // Получаем строку, например "riviera"
+  
+  // 4. Состояния для данных, загрузки и ошибок
+  const [clubData, setClubData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchClubData = async () => {
+      try {
+        setLoading(true);
+        
+        // Определяем цифровой ID
+        const backendId = CLUB_ID_MAP[clubId];
+        
+        if (!backendId) {
+          throw new Error("Клуб не найден в списке маппинга");
+        }
+
+        // 5. Реальный запрос к твоему API
+        const response = await axios.get(`http://localhost:8000/api/v1/clubs/${backendId}`);
+        setClubData(response.data);
+      
+      } catch (err) {
+        console.error("Ошибка загрузки данных клуба:", err);
+        setError("Не удалось загрузить данные о клубе. Возможно, сервер недоступен.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchClubData();
+  }, [clubId]);
+
+  // 6. Отображение состояния загрузки или ошибки
+  if (loading) return <div style={{padding: "100px", textAlign: "center"}}>Загрузка данных клуба...</div>;
+  if (error) return <div style={{padding: "100px", textAlign: "center", color: "red"}}>{error}</div>;
+  if (!clubData) return null;
 
   return (
-    // ИСПРАВЛЕНИЕ: Мы убираем класс 'club-details-page' 
-    // и используем ту же структуру, что и 'ClubsPage'
     <>
-      {/* ИСПРАВЛЕНИЕ: 
-        Мы больше не передаем 'isDetailsPage={true}'.
-        Теперь компонент Header будет использовать '.global-header' 
-        (шапку как на 2-м скриншоте), а не прозрачную.
-      */}
       <Header onOpenModal={onOpenModal} />
 
-      {/* ИСПРАВЛЕНИЕ:
-        Мы используем '.page-container' (как на 'ClubsPage') 
-        вместо '.details-container', чтобы отступ от шапки был правильным.
-      */}
       <div className="page-container">
         <div className="details-content-panel">
           
           <div className="club-header-info">
-            <h2 className="club-title">{clubData.title}</h2>
+            <h2 className="club-title">{clubData.name}</h2> {/* Поле name вместо title (как в Python модели) */}
             <p className="club-address">{clubData.address}</p>
           </div>
 
@@ -69,6 +70,7 @@ function ClubDetailsPage({ onOpenModal }) {
             
             <div className="details-left-column">
               <ul className="club-features-list">
+                {/* 7. Рендерим особенности с бэкенда */}
                 {clubData.features.map((feature, index) => (
                   <li key={index}>{feature}</li>
                 ))}
@@ -78,12 +80,13 @@ function ClubDetailsPage({ onOpenModal }) {
                 <h3>Загруженность</h3>
                 <div className="chart-area">
                   <div className="bar-chart">
-                    {clubData.load.map((height, index) => (
+                    {/* 8. API возвращает числа (int), добавляем '%' для CSS */}
+                    {clubData.load_data.map((val, index) => (
                       <div 
                         key={index}
                         className="bar" 
-                        style={{ height: height }}
-                        title={DAYS[index]}
+                        style={{ height: `${val}%` }} 
+                        title={`${val}%`}
                       ></div>
                     ))}
                   </div>
@@ -96,7 +99,16 @@ function ClubDetailsPage({ onOpenModal }) {
 
             <div className="details-right-column">
               <div className="club-image-wrapper">
-                <img src={clubData.image} alt={clubData.title} className="club-image" />
+                {/* 9. Используем картинку с бэкенда. 
+                   Если путь с бэкенда начинается с /images, добавляем /assets если нужно, 
+                   но твой Python отдает /images/..., а фронт ждет /assets/images. 
+                   Делаем фикс пути: */}
+                <img 
+                    src={`/assets${clubData.image}`} 
+                    onError={(e) => { e.target.src = clubData.image; }} /* Фолбек */
+                    alt={clubData.name} 
+                    className="club-image" 
+                />
               </div>
               <Link to="/tariffs" className="btn btn-green">Выбрать клуб</Link>
             </div>
