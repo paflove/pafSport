@@ -1,0 +1,1080 @@
+/* ============================================= */
+/* --- ПЕРЕМЕННЫЕ И БАЗОВЫЕ СТИЛИ --- */
+/* ============================================= */
+:root {
+    --primary-brown: #6F4E37;
+    --light-brown: #8B5A2B;
+    --cream: #FAF3E8;
+    --peach: #F8D7B5;
+    --blue: #5bb2f0;
+    --font-main: 'Montserrat', sans-serif;
+
+    /* ПЕРЕМЕННЫЕ ДЛЯ ТАРИФОВ */
+    --tariff-light-bg: #d0e8ff;    
+    --tariff-light-color: #3870b3; 
+    
+    --tariff-smart-bg: #d9ffe6;    
+    --tariff-smart-color: #388e5d; 
+    
+    --tariff-infinity-bg: #ffe6db;   
+    --tariff-infinity-color: #cc6c48; 
+    
+    --tariff-button-bg: #F8D7B5; 
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-main);
+    background-color: var(--cream);
+    color: var(--light-brown);
+    height: 100%;
+}
+
+/* ============================================= */
+/* --- ГЛАВНАЯ СТРАНИЦА (index.html) --- */
+/* ============================================= */
+
+.container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.image-panel {
+    flex: 4;
+    background-image: url('/assets/images/home-bg.jpg'); /* Путь к public */
+    background-size: cover;
+    background-position: center center;
+}
+
+.content-panel {
+    flex: 6;
+    display: flex;
+    flex-direction: column;
+    padding: 0 80px;
+}
+
+/* ====== ШАПКА ВНУТРИ ПРАВОЙ ПАНЕЛИ (ДЛЯ HomePage) ====== */
+/* Этот .top-header используется ТОЛЬКО на HomePage */
+.content-panel .top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 40px;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 2;
+}
+
+/* Общие стили для логотипа и навигации, которые используются ВЕЗДЕ */
+.top-header .logo {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-brown);
+    text-decoration: none;
+}
+
+/* ИСПРАВЛЕНИЕ: Стили для ВСЕХ элементов <a> в <nav> */
+.top-header nav a {
+    text-decoration: none;
+    color: var(--light-brown);
+    margin-left: 40px;
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.top-header nav a:hover {
+    color: var(--primary-brown);
+}
+
+/* Основной контент */
+.content-panel main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: -120px; /* Поднимаем контент выше */
+    align-items: flex-start;
+
+    /* --- ИСПРАВЛЕНИЕ: Опускаем main --- */
+    position: relative;
+    z-index: 1;
+    /* -------------------------------- */
+}
+
+.content-panel main h1 {
+    font-size: 52px;
+    font-weight: 500;
+    color: var(--primary-brown);
+    margin: 0 0 20px 0;
+    max-width: 500px;
+}
+
+.content-panel main p {
+    font-size: 16px;
+    margin: 0 0 30px 0;
+    max-width: 450px;
+}
+
+
+/* --- КНОПКИ --- */
+/* ============================================= */
+.btn {
+    display: inline-flex;
+    background-color: #F8D7B5;
+    color: #6F4E37;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn:hover {
+    background-color: #f5cda4;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(139, 90, 43, 0.2);
+}
+
+.content-panel main h1,
+.content-panel main p,
+.content-panel main .btn {
+    max-width: none;
+}
+
+/* ============================================= */
+/* --- ШАПКА ДЛЯ ДРУГИХ СТРАНИЦ (Clubs, Tariffs) --- */
+/* ============================================= */
+/* Этот .top-header используется ВЕЗДЕ, КРОМЕ HomePage */
+.global-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 80px;
+    position: fixed; /* Закрепляем шапку вверху */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: var(--cream);
+    box-sizing: border-box;
+}
+
+/* Копируем стили лого и nav для .global-header */
+.global-header .logo {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-brown);
+    text-decoration: none;
+}
+
+.global-header nav a {
+    text-decoration: none;
+    color: var(--light-brown);
+    margin-left: 40px;
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.global-header nav a:hover {
+    color: var(--primary-brown);
+}
+
+/* ============================================= */
+/* --- СТРАНИЦА ВЫБОРА КЛУБА (clubs.html) --- */
+/* ============================================= */
+
+.page-container {
+    padding: 150px 80px 60px; /* Отступ 150px сверху для fixed-шапки */
+}
+
+.clubs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 60px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.club-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(139, 90, 43, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.club-card:hover {
+    transform: translateY(-5px);
+}
+
+.club-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.club-card h2 {
+    color: #6F4E37;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+}
+
+.club-card p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0 0 25px 0;
+    color: #8B5A2B;
+}
+
+.club-card .btn {
+    margin-top: 10px;
+}
+
+/* ============================================= */
+/* --- СТИЛИ ДЛЯ СТРАНИЦЫ ДЕТАЛЕЙ КЛУБА (club-details.html) --- */
+/* ============================================= */
+
+/* Шапка для ДЕТАЛЕЙ */
+.top-header.fixed-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    background-color: transparent;
+    padding: 40px 80px;
+    box-sizing: border-box;
+}
+
+/* Контейнер страницы деталей */
+.details-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--cream);
+    padding: 20px 0;
+}
+
+/* Основная панель контента */
+.details-content-panel {
+    background-color: var(--cream);
+    width: 90%;
+    max-width: 1400px; 
+    height: 90vh; 
+    padding: 80px 80px 50px; 
+    box-shadow: none; 
+    display: flex;
+    flex-direction: column;
+}
+
+/* Заголовок клуба */
+.club-header-info {
+    margin-bottom: 30px;
+    padding-top: 30px; /* Отступ от шапки */
+}
+
+.club-title {
+    font-size: 36px;
+    font-weight: 500;
+    color: var(--primary-brown);
+    margin: 0;
+}
+
+.club-address {
+    font-size: 18px;
+    color: var(--light-brown);
+    margin-top: 5px;
+}
+
+/* Сетка для основного контента */
+.details-main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr; 
+    gap: 40px;
+    flex-grow: 1; 
+    max-height: 80%;
+    overflow-y: auto;
+}
+
+/* --- ЛЕВАЯ КОЛОНКА: Удобства и Загруженность --- */
+.details-left-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.club-features-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 40px 0;
+}
+
+.club-features-list li {
+    font-size: 16px;
+    color: var(--light-brown);
+    line-height: 1.8;
+    padding-left: 20px;
+    position: relative;
+}
+
+.club-features-list li::before {
+    content: "•"; 
+    color: var(--light-brown);
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+/* --- ГРАФИК ЗАГРУЖЕННОСТИ --- */
+.club-load-chart h3 {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--light-brown);
+    margin-bottom: 15px;
+}
+
+.chart-area {
+    background: linear-gradient(to top, #eaf9ff, #ccf0ff); 
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bar-chart {
+    display: flex;
+    width: 100%;
+    height: 150px; 
+    align-items: flex-end; 
+    justify-content: space-around;
+    padding: 10px 0;
+}
+
+.bar {
+    width: 8%; 
+    background-color: var(--blue);
+    margin: 0 3%;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.5s ease;
+    opacity: 0.8;
+}
+
+.chart-labels {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    font-size: 12px;
+    color: var(--primary-brown);
+    font-weight: 600;
+    padding-top: 5px;
+}
+
+.chart-labels span {
+    width: 8%;
+    text-align: center;
+}
+
+/* --- ПРАВАЯ КОЛОНКА: Изображение и Кнопка --- */
+.details-right-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+    align-items: flex-end; 
+}
+
+.club-image-wrapper {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.club-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+}
+
+/* Стили для зеленой кнопки */
+.btn-green {
+    background-color: #C8F0C8; 
+    color: #4C8E4C; 
+    border: 1px solid #4C8E4C; 
+    font-weight: 600;
+}
+
+.btn-green:hover {
+    background-color: #bce9bc;
+    box-shadow: 0 2px 8px rgba(76, 142, 76, 0.2);
+}
+
+/* ============================================= */
+/* --- СТИЛИ ДЛЯ СТРАНИЦЫ ТАРИФОВ (tariffs.html) --- */
+/* ============================================= */
+
+.tariffs-container {
+    padding: 150px 80px 60px; /* Отступ 150px сверху для fixed-шапки */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.tariffs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.tariff-card {
+    padding: 30px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 450px; 
+    justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.tariff-card h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* Стили для тарифов */
+.light-tariff {
+    background-color: var(--tariff-light-bg);
+    color: var(--tariff-light-color);
+}
+.light-tariff h2 { color: var(--tariff-light-color); }
+
+.smart-tariff {
+    background-color: var(--tariff-smart-bg);
+    color: var(--tariff-smart-color);
+}
+.smart-tariff h2 { color: var(--tariff-smart-color); }
+
+.infinity-tariff {
+    background-color: var(--tariff-infinity-bg);
+    color: var(--tariff-infinity-color);
+}
+.infinity-tariff h2 { color: var(--tariff-infinity-color); }
+
+/* Список преимуществ */
+.tariff-features {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 40px;
+    text-align: left;
+    width: 100%;
+}
+
+.tariff-features li {
+    font-size: 16px;
+    line-height: 2;
+    padding-left: 15px;
+    position: relative;
+    color: inherit; 
+}
+
+.tariff-features li::before {
+    content: "•";
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+/* Стили для кнопок тарифов */
+.btn-tariff {
+    margin-top: auto; 
+    background-color: var(--tariff-button-bg);
+    color: var(--primary-brown);
+}
+.btn-tariff:hover {
+    background-color: #f5cda4;
+}
+
+/* ============================================= */
+/* --- СТИЛИ ДЛЯ МОДАЛЬНОГО ОКНА (ВХОД/РЕГИСТРАЦИЯ) --- */
+/* ============================================= */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; 
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    position: relative;
+    background-color: transparent; 
+    padding: 0;
+    border-radius: 20px; 
+    z-index: 2001; 
+}
+
+.auth-box {
+    background-color: var(--tariff-infinity-bg); 
+    color: var(--primary-brown);
+    padding: 30px 40px;
+    border-radius: 15px;
+    text-align: center;
+    width: 350px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.auth-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-brown);
+    margin-bottom: 25px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--light-brown);
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--peach);
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: white;
+    color: var(--primary-brown);
+    box-sizing: border-box;
+}
+.input-group input::placeholder {
+    color: #999999; 
+    opacity: 1; 
+}
+
+/* Кнопки внутри формы */
+.btn-auth {
+    width: 100%;
+    padding: 12px 0;
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.login-btn {
+    background-color: var(--peach);
+    color: var(--primary-brown);
+    border: none;
+    margin-bottom: 10px;
+}
+
+.register-btn {
+    background-color: var(--primary-brown); 
+    color: white;
+    border: none;
+}
+
+/* Кнопка закрытия */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--primary-brown);
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* ============================================= */
+/* --- АДАПТИВНОСТЬ (ОБЩАЯ) --- */
+/* ============================================= */
+@media (max-width: 1024px) {
+    .clubs-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+    .tariffs-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .image-panel {
+        min-height: 40vh;
+        flex: none;
+    }
+    
+    .content-panel {
+        padding: 0 24px;
+    }
+    
+    /* Шапка на главной */
+    .content-panel .top-header {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px 0 0 0;
+    }
+    /* Глобальная шапка */
+    .global-header {
+        padding: 20px 24px;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .content-panel main {
+        margin-top: 0;
+        text-align: center;
+        padding: 40px 0;
+    }
+    
+    .content-panel main h1 {
+        font-size: 36px;
+        max-width: none;
+    }
+    
+    .content-panel main p {
+        max-width: none;
+    }
+    
+    .top-header nav a {
+        margin: 0 20px;
+        font-size: 16px;
+    }
+    
+    .top-header .logo {
+        font-size: 24px;
+    }
+
+    .page-container,
+    .tariffs-container {
+        padding: 150px 24px 40px;
+    }
+    
+    .clubs-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-panel main h1 {
+        font-size: 28px;
+    }
+    
+    .content-panel {
+        padding: 0 20px;
+    }
+    
+    .top-header nav a {
+        margin: 0 15px;
+        font-size: 14px;
+    }
+    
+    .content-panel .top-header {
+        padding-top: 15px;
+    }
+    .global-header {
+        padding: 15px 20px;
+    }
+}
+
+/* ... (Стили для club-details) ... */
+
+@media (max-width: 1024px) {
+    .details-main-grid {
+        grid-template-columns: 1fr; 
+    }
+    
+    .details-right-column {
+        flex-direction: column-reverse; 
+        align-items: flex-start;
+        gap: 30px;
+    }
+    
+    .btn-green {
+        width: 100%; 
+    }
+
+    .club-header-info {
+        padding-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    .details-content-panel {
+        padding: 60px 40px 30px;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .top-header.fixed-header {
+        position: static; 
+        padding: 20px 40px;
+        background-color: var(--cream);
+    }
+}
+
+@media (max-width: 768px) {
+    .details-content-panel {
+        padding: 40px 20px 20px;
+    }
+
+    .top-header.fixed-header {
+        padding: 15px 20px;
+    }
+
+    .club-title {
+        font-size: 28px;
+    }
+    
+    .club-address {
+        font-size: 16px;
+    }
+}
+/* --- СТИЛИ ДЛЯ ПРОФИЛЯ (ProfilePage) --- */
+
+.profile-container {
+    padding-top: 120px; /* Отступ от шапки */
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+}
+
+.profile-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-heading {
+    font-size: 24px;
+    color: var(--primary-brown);
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+/* Карточка тарифа (Голубая) */
+.active-tariff-card {
+    background-color: #BFDCE7; /* Голубой цвет с макета */
+    color: #6F4E37; /* Коричневый текст */
+    padding: 30px 40px;
+    border-radius: 20px;
+    width: 320px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.active-tariff-card .tariff-name {
+    font-size: 28px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 600;
+    /* Цвет заголовка тарифа - можно сделать чуть темнее или оставить коричневым */
+    color: #5A8CA0; 
+}
+
+.tariff-details-list {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin: 0;
+}
+
+.tariff-details-list li {
+    position: relative;
+    padding-left: 15px;
+    margin-bottom: 8px;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.tariff-details-list li::before {
+    content: "•";
+    color: #5A8CA0;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+/* Даты */
+.tariff-dates {
+    text-align: left;
+    width: 100%;
+    max-width: 320px;
+    margin-top: 10px;
+}
+
+.tariff-dates p {
+    font-size: 18px;
+    color: var(--primary-brown);
+    margin: 5px 0;
+}
+
+/* Стили для Email в шапке */
+.user-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-email {
+    font-size: 18px;
+    color: var(--primary-brown);
+    font-weight: 500;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: var(--light-brown);
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+/* --- WIDGET CHAT STYLES --- */
+
+.chat-widget-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 9999;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Кнопка открытия (Кружок) */
+.chat-toggle-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--primary-brown);
+    color: white;
+    font-size: 30px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(111, 78, 55, 0.4);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-toggle-btn:hover {
+    transform: scale(1.1);
+}
+
+.chat-toggle-btn.hidden {
+    display: none;
+}
+
+/* Окно чата */
+.chat-window {
+    width: 350px;
+    height: 500px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    
+    /* Анимация появления */
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+    visibility: hidden;
+    transition: all 0.3s ease;
+    
+    /* Позиционирование относительно контейнера */
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.chat-window.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+}
+
+/* Шапка чата */
+.chat-header {
+    background-color: var(--primary-brown);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-chat {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Область сообщений */
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    background-color: #FAF3E8; /* Cream */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Пузыри сообщений */
+.message {
+    display: flex;
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.message.bot {
+    justify-content: flex-start;
+}
+
+.message-bubble {
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    font-size: 14px;
+    line-height: 1.4;
+    position: relative;
+}
+
+.message.user .message-bubble {
+    background-color: var(--primary-brown);
+    color: white;
+    border-bottom-right-radius: 2px;
+}
+
+.message.bot .message-bubble {
+    background-color: white;
+    color: var(--light-brown);
+    border: 1px solid #e0e0e0;
+    border-bottom-left-radius: 2px;
+}
+
+/* Инпут ввода */
+.chat-input-area {
+    padding: 15px;
+    background: white;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input-area input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+}
+
+.chat-input-area button {
+    background-color: var(--primary-brown);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.message-bubble.typing {
+    color: #999;
+    font-style: italic;
+}
+.message-bubble.typing {
+    color: #8B5A2B;
+    font-size: 20px;
+    line-height: 10px;
+    padding: 15px;
+}
+
+.message-bubble.typing span {
+    animation: blink 1.4s infinite both;
+    margin: 0 1px;
+}
+
+.message-bubble.typing span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.message-bubble.typing span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes blink {
+    0% { opacity: 0.2; }
+    20% { opacity: 1; }
+    100% { opacity: 0.2; }
+}
