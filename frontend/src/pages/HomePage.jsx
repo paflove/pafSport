@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../components/Header'; // Импортируем шапку
+// Header удален, так как он есть в App.jsx
 
 function HomePage({ onOpenModal }) {
   return (
@@ -8,8 +8,7 @@ function HomePage({ onOpenModal }) {
       <div className="image-panel"></div>
       <div className="content-panel">
         
-        {/* Шапка для главной страницы (isHomePage = true) */}
-        <Header onOpenModal={onOpenModal} isHomePage={true} />
+        {/* Header удален отсюда */}
 
         <main>
           <h1>Лучшее место для ваших тренировок!</h1>

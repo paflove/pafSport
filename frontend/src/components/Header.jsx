@@ -1,17 +1,23 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-function Header({ onOpenModal, user, onLogout, isHomePage = false, isDetailsPage = false }) {
+function Header({ onOpenModal, user, onLogout }) {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  let headerClass = 'top-header';
+  // Логика стилей:
+  // Если мы на главной ('/') -> используем особый стиль (прозрачный/абсолютный)
+  // В остальных случаях -> глобальный стиль (бежевый фон)
+  const isHomePage = location.pathname === '/';
   
+  // Базовый класс для навигации
+  let navClass = "top-header"; 
+  
+  // Добавляем модификаторы в зависимости от страницы
   if (isHomePage) {
-    // Используется внутри .content-panel
-  } else if (isDetailsPage) {
-    headerClass += ' fixed-header';
+    navClass += " home-header-overlay"; // Новый класс для главной (см. CSS ниже)
   } else {
-    headerClass = 'global-header';
+    navClass = "global-header"; // Стандартный класс для остальных страниц
   }
 
   // Обработчик для клика по "Профилю" (если НЕ залогинен)
@@ -20,32 +26,36 @@ function Header({ onOpenModal, user, onLogout, isHomePage = false, isDetailsPage
     onOpenModal(); 
   };
 
-  // Обработчик перехода в профиль (если залогинен)
-  const goToProfile = (e) => {
+  const handleProfileClick = (e) => {
     e.preventDefault();
     navigate('/profile');
   };
 
   return (
-    <header className={headerClass}>
+    <header className={navClass}>
       <Link to="/" className="logo">*PafSport</Link>
       <nav>
         <Link to="/clubs">Клубы</Link>
         <Link to="/tariffs">Тарифы</Link>
 
-        {/* ПРОВЕРКА: Авторизован пользователь или нет */}
+        {/* Если user есть - показываем почту и выход. Если нет - кнопку Профиль */}
         {user ? (
-          <div className="user-nav" style={{ display: 'inline-flex', alignItems: 'center', gap: '20px', marginLeft: '40px' }}>
-            {/* Клик по почте ведет в личный кабинет */}
-            <a href="/profile" onClick={goToProfile} className="user-email">
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '20px', marginLeft: '40px' }}>
+            <span 
+                onClick={handleProfileClick} 
+                style={{ cursor: 'pointer', fontWeight: 'bold', color: '#6F4E37' }}
+            >
               {user.email}
-            </a>
-            <button onClick={onLogout} className="logout-btn">
+            </span>
+            <button 
+                onClick={onLogout} 
+                className="logout-btn"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', color: '#8B5A2B' }}
+            >
               Выйти
             </button>
           </div>
         ) : (
-          /* Если пользователя нет, показываем кнопку входа */
           <a href="#" onClick={handleAuthClick}>
             Профиль
           </a>

@@ -794,7 +794,7 @@ body, html {
 /* --- СТИЛИ ДЛЯ ПРОФИЛЯ (ProfilePage) --- */
 
 .profile-container {
-    padding-top: 120px; /* Отступ от шапки */
+    padding-top: 120px;
     display: flex;
     justify-content: center;
     min-height: 100vh;
@@ -815,25 +815,43 @@ body, html {
     margin-bottom: 10px;
 }
 
-/* Карточка тарифа (Голубая) */
+/* Карточка тарифа в профиле */
 .active-tariff-card {
-    background-color: #BFDCE7; /* Голубой цвет с макета */
-    color: #6F4E37; /* Коричневый текст */
+    /* Убрали background-color, теперь он берется из классов .light-tariff и т.д. */
     padding: 30px 40px;
     border-radius: 20px;
-    width: 320px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    width: 350px; /* Чуть шире, чтобы вместить текст Infinity */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
 }
 
+/* Название тарифа внутри карточки */
 .active-tariff-card .tariff-name {
-    font-size: 28px;
+    font-size: 32px;
     margin-top: 0;
-    margin-bottom: 20px;
-    font-weight: 600;
-    /* Цвет заголовка тарифа - можно сделать чуть темнее или оставить коричневым */
-    color: #5A8CA0; 
+    margin-bottom: 10px;
+    font-weight: 700;
+    /* Цвет наследуется от родительского класса (light-tariff и т.д.) */
+    color: inherit; 
+    opacity: 0.9;
 }
 
+/* Информация о клубе внутри карточки */
+.profile-club-info {
+    margin-bottom: 25px;
+    font-weight: 600;
+    font-size: 18px;
+    /* Делаем цвет чуть темнее основного цвета тарифа */
+    filter: brightness(0.8); 
+}
+
+.profile-club-info span {
+    font-size: 1.1em;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Список услуг */
 .tariff-details-list {
     list-style: none;
     padding: 0;
@@ -843,32 +861,42 @@ body, html {
 
 .tariff-details-list li {
     position: relative;
-    padding-left: 15px;
+    padding-left: 20px;
     margin-bottom: 8px;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 1.4;
+    color: inherit; /* Цвет текста берется от тарифа */
 }
 
 .tariff-details-list li::before {
     content: "•";
-    color: #5A8CA0;
-    font-weight: bold;
     position: absolute;
     left: 0;
+    font-weight: bold;
+    /* Точка тоже наследует цвет */
+    color: inherit; 
+    filter: brightness(0.8); /* Чуть темнее */
 }
 
-/* Даты */
+/* Даты под карточкой */
 .tariff-dates {
     text-align: left;
     width: 100%;
-    max-width: 320px;
+    max-width: 350px;
     margin-top: 10px;
+    padding: 0 10px;
 }
 
 .tariff-dates p {
-    font-size: 18px;
+    font-size: 16px;
     color: var(--primary-brown);
     margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.tariff-dates p span {
+    font-weight: 600;
 }
 
 /* Стили для Email в шапке */
@@ -1077,4 +1105,29 @@ body, html {
     0% { opacity: 0.2; }
     20% { opacity: 1; }
     100% { opacity: 0.2; }
+}
+/* --- СТИЛЬ ШАПКИ ДЛЯ ГЛАВНОЙ СТРАНИЦЫ (применяется через JS в Header.jsx) --- */
+.home-header-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60%; /* Занимает правую часть (content-panel) */
+    z-index: 100;
+    padding: 40px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent; /* Прозрачный фон */
+}
+
+/* Адаптив: на мобильных шапка занимает всю ширину */
+@media (max-width: 768px) {
+    .home-header-overlay {
+        width: 100%;
+        position: relative;
+        background-color: var(--cream); /* На мобильных возвращаем цвет */
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px 24px;
+    }
 }
