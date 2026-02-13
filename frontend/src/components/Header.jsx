@@ -5,22 +5,16 @@ function Header({ onOpenModal, user, onLogout }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Логика стилей:
-  // Если мы на главной ('/') -> используем особый стиль (прозрачный/абсолютный)
-  // В остальных случаях -> глобальный стиль (бежевый фон)
   const isHomePage = location.pathname === '/';
   
-  // Базовый класс для навигации
   let navClass = "top-header"; 
   
-  // Добавляем модификаторы в зависимости от страницы
   if (isHomePage) {
-    navClass += " home-header-overlay"; // Новый класс для главной (см. CSS ниже)
+    navClass += " home-header-overlay";
   } else {
-    navClass = "global-header"; // Стандартный класс для остальных страниц
+    navClass = "global-header";
   }
 
-  // Обработчик для клика по "Профилю" (если НЕ залогинен)
   const handleAuthClick = (e) => {
     e.preventDefault();
     onOpenModal(); 
@@ -38,14 +32,20 @@ function Header({ onOpenModal, user, onLogout }) {
         <Link to="/clubs">Клубы</Link>
         <Link to="/tariffs">Тарифы</Link>
 
-        {/* Если user есть - показываем почту и выход. Если нет - кнопку Профиль */}
+        {/* --- НОВОЕ: Ссылка на админку только для администратора --- */}
+        {user && user.role === 'admin' && (
+            <Link to="/admin" style={{color: "red", fontWeight: "bold"}}>Админка</Link>
+        )}
+
         {user ? (
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '20px', marginLeft: '40px' }}>
             <span 
                 onClick={handleProfileClick} 
                 style={{ cursor: 'pointer', fontWeight: 'bold', color: '#6F4E37' }}
             >
-              {user.email}
+              {user.email} 
+              {/* Можно отобразить роль рядом с email */}
+              {user.role === 'admin' && <span style={{fontSize: "0.8em", color: "red", marginLeft: "5px"}}>(ADM)</span>}
             </span>
             <button 
                 onClick={onLogout} 
