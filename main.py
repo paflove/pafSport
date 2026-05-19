@@ -252,6 +252,7 @@ class AuthService:
         self.user_repo.create_user(new_user)
         return self.generate_tokens(auth_data.email)
 
+
     def refresh(self, refresh_token: str):
         try:
             payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -268,6 +269,7 @@ class AuthService:
         except (jwt.InvalidTokenError, Exception):
             raise HTTPException(status_code=401, detail="Невалидный токен")
 
+
     def logout(self, refresh_token: str):
         try:
             payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -276,6 +278,7 @@ class AuthService:
                 self.session_repo.revoke_refresh_token(email)
         except:
             pass
+
 
 class WeatherService:
     def get_weather(self, lat: float = 55.75, lon: float = 37.62):
