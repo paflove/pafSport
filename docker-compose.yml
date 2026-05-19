@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # Наш Python сервер
+  backend:
+    build: .
+    env_file:
+      - .env
+    # Бэкенд не запустится, пока MinIO не скажет "я готов" (Healthcheck)
+    depends_on:
+      minio:
+        condition: service_healthy
+
+  # Наш React + Nginx
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80" # Сайт будет доступен просто по http://localhost
+    depends_on:
+      - backend
+
+  # S3 Хранилище
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # API
+      - "9001:9001" # Админка
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+    # Проверка "живости" базы данных перед запуском бэкенда
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# Создаем постоянный том (чтобы аватарки не удалялись при перезапуске контейнера)
+volumes:
+  minio_data:
